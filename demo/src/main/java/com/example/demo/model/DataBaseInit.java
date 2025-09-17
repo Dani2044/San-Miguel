@@ -10,7 +10,16 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
-import com.example.demo.repository.*;
+import com.example.demo.repository.AdministratorRepository;
+import com.example.demo.repository.DonationRepository;
+import com.example.demo.repository.DonationReportRepository;
+import com.example.demo.repository.DonorRepository;
+import com.example.demo.repository.EventRepository;
+import com.example.demo.repository.FoundationRepository;
+import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.SportsClassRepository;
+import com.example.demo.repository.UserEntityRepository;
+import com.example.demo.repository.RoleRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -54,7 +63,7 @@ public class DataBaseInit implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        // TODO: Preguntar a la fundación por todos los datos reales de cada clase y llenar la base de datos de desarrollo con esos datos.
         // 1. Create role
         Role adminRole = new Role("ADMIN");
         roleRepository.save(adminRole);

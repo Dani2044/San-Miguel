@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Administrator {
+    // TODO: Verificar que todo el esquema (modelo) sea correcto. Ejemplo: Si un campo es único, se debe poner.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long administratorId;

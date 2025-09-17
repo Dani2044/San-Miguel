@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.example.demo.model.Administrator;
 
 public interface AdministratorService {
+    // TODO: Realizar validaciones de reglas del negocio en todos los servicios. Ejemplo: La cantidad donada no es negativa.
     List<Administrator> getAllAdministrators();
     Optional<Administrator> getAdministratorById(Long administratorId);
     Administrator createAdministrator(Administrator administrator);
