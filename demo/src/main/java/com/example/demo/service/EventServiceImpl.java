@@ -23,8 +23,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> getEventById(Long event_id) {
-        return eventRepository.findById(event_id);
+    public Optional<Event> getEventById(Long eventId) {
+        return eventRepository.findById(eventId);
     }
 
     @Override
@@ -33,21 +33,21 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event updateEvent(Long event_id, Event event) {
-        return eventRepository.findById(event_id).map(existingEvent -> {
+    public Event updateEvent(Long eventId, Event event) {
+        return eventRepository.findById(eventId).map(existingEvent -> {
             existingEvent.setTitle(event.getTitle());
             existingEvent.setDescription(event.getDescription());
             existingEvent.setStatus(event.getStatus());
-            existingEvent.setStart_date(event.getStart_date());
-            existingEvent.setEnd_date(event.getEnd_date());
+            existingEvent.setStartDate(event.getStartDate());
+            existingEvent.setEndDate(event.getEndDate());
             existingEvent.setFoundation(event.getFoundation());
             return eventRepository.save(existingEvent);
-        }).orElseThrow(() -> new RuntimeException("Event not found with id: " + event_id));
+        }).orElseThrow(() -> new RuntimeException("Event not found with id: " + eventId));
     }
 
     @Override
-    public void deleteEvent(Long event_id) {
-        eventRepository.deleteById(event_id);
+    public void deleteEvent(Long eventId) {
+        eventRepository.deleteById(eventId);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> searchByStartDate(Date start_date) {
-        return eventRepository.findByStartDate(start_date);
+    public List<Event> searchByStartDate(Date startDate) {
+        return eventRepository.findByStartDate(startDate);
     }
 
     @Override

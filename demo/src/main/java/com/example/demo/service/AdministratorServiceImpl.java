@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Administrator;
 import com.example.demo.repository.AdministratorRepository;
 
+@Service
 public class AdministratorServiceImpl implements AdministratorService {
-    
+
     private final AdministratorRepository administratorRepository;
 
     @Autowired
@@ -23,8 +25,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public Optional<Administrator> getAdministratorById(Long administrator_id) {
-        return administratorRepository.findById(administrator_id);
+    public Optional<Administrator> getAdministratorById(Long administratorId) {
+        return administratorRepository.findById(administratorId);
     }
 
     @Override
@@ -33,8 +35,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public Administrator updateAdministrator(Long administrator_id, Administrator administrator) {
-        return administratorRepository.findById(administrator_id)
+    public Administrator updateAdministrator(Long administratorId, Administrator administrator) {
+        return administratorRepository.findById(administratorId)
                 .map(existingAdmin -> {
                     existingAdmin.setUsername(administrator.getUsername());
                     existingAdmin.setPassword(administrator.getPassword());
@@ -45,15 +47,15 @@ public class AdministratorServiceImpl implements AdministratorService {
                     existingAdmin.setFoundation(administrator.getFoundation());
                     return administratorRepository.save(existingAdmin);
                 })
-                .orElseThrow(() -> new RuntimeException("Administrator not found with id: " + administrator_id));
+                .orElseThrow(() -> new RuntimeException("Administrator not found with id: " + administratorId));
     }
 
     @Override
-    public void deleteAdministrator(Long administrator_id) {
-        if (!administratorRepository.existsById(administrator_id)) {
-            throw new RuntimeException("Administrator not found with id: " + administrator_id);
+    public void deleteAdministrator(Long administratorId) {
+        if (!administratorRepository.existsById(administratorId)) {
+            throw new RuntimeException("Administrator not found with id: " + administratorId);
         }
-        administratorRepository.deleteById(administrator_id);
+        administratorRepository.deleteById(administratorId);
     }
 
     @Override

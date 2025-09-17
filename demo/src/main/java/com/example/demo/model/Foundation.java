@@ -22,7 +22,7 @@ import jakarta.persistence.OneToOne;
 public class Foundation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long foundation_id;
+    private Long foundationId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

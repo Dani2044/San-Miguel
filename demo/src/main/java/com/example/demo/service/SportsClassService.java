@@ -7,9 +7,9 @@ import com.example.demo.model.SportsClass;
 
 public interface SportsClassService {
     List<SportsClass> getAllSportsClasses();
-    Optional<SportsClass> getSportsClassById(Long sports_class_id);
+    Optional<SportsClass> getSportsClassById(Long sportsClassId);
     SportsClass createSportsClass(SportsClass sportsClass);
-    SportsClass updateSportsClass(Long sports_class_id, SportsClass sportsClass);
-    void deleteSportsClass(Long sports_class_id);
+    SportsClass updateSportsClass(Long sportsClassId, SportsClass sportsClass);
+    void deleteSportsClass(Long sportsClassId);
     List<SportsClass> searchByName(String name);
 }

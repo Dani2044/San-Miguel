@@ -32,8 +32,8 @@ public class DonationReportController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DonationReport> getDonationReportById(@PathVariable("id") Long donation_report_id) {
-        return donationReportService.getDonationReportById(donation_report_id)
+    public ResponseEntity<DonationReport> getDonationReportById(@PathVariable("id") Long donationReportId) {
+        return donationReportService.getDonationReportById(donationReportId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -44,24 +44,24 @@ public class DonationReportController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DonationReport> updateDonationReport(@PathVariable("id") Long donation_report_id,
+    public ResponseEntity<DonationReport> updateDonationReport(@PathVariable("id") Long donationReportId,
                                                                @RequestBody DonationReport report) {
-        return ResponseEntity.ok(donationReportService.updateDonationReport(donation_report_id, report));
+        return ResponseEntity.ok(donationReportService.updateDonationReport(donationReportId, report));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDonationReport(@PathVariable("id") Long donation_report_id) {
-        donationReportService.deleteDonationReport(donation_report_id);
+    public ResponseEntity<Void> deleteDonationReport(@PathVariable("id") Long donationReportId) {
+        donationReportService.deleteDonationReport(donationReportId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/donation/{donation_id}")
-    public ResponseEntity<List<DonationReport>> searchByDonationId(@PathVariable Long donation_id) {
-        return ResponseEntity.ok(donationReportService.searchByDonationId(donation_id));
+    @GetMapping("/donation/{donationId}")
+    public ResponseEntity<List<DonationReport>> searchByDonationId(@PathVariable Long donationId) {
+        return ResponseEntity.ok(donationReportService.searchByDonationId(donationId));
     }
 
-    @GetMapping("/date/{report_date}")
-    public ResponseEntity<List<DonationReport>> searchByReportDate(@PathVariable Date report_date) {
-        return ResponseEntity.ok(donationReportService.searchByReportDate(report_date));
+    @GetMapping("/date/{reportDate}")
+    public ResponseEntity<List<DonationReport>> searchByReportDate(@PathVariable Date reportDate) {
+        return ResponseEntity.ok(donationReportService.searchByReportDate(reportDate));
     }
 }

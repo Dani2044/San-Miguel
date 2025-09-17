@@ -10,6 +10,6 @@ import com.example.demo.model.DonationReport;
 
 @Repository
 public interface DonationReportRepository extends JpaRepository<DonationReport, Long> {
-    List<DonationReport> findByDonationDonationId(Long donation_id);
-    List<DonationReport> findByReportDate(Date report_date);
+    List<DonationReport> findByDonationDonationId(Long donationId);
+    List<DonationReport> findByReportDate(Date reportDate);
 }

@@ -12,6 +12,6 @@ import com.example.demo.model.Event;
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByTitleContainingIgnoreCase(String title);
     List<Event> findByStatus(String status);
-    List<Event> findByStartDate(Date start_date);
+    List<Event> findByStartDate(Date startDate);
     List<Event> findByLocation(String location);
 }

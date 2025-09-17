@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long administrator_id;
+    private Long administratorId;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
@@ -39,7 +39,7 @@ public class Administrator {
     private UserEntity userEntity;
 
     @OneToOne
-    @JoinColumn(name = "foundation_id", unique = true)
+    @JoinColumn(name = "foundationId", unique = true)
     private Foundation foundation;
 
     public Administrator(String username, String password, String name, String email, String photo, String phone) {

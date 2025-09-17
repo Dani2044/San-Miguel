@@ -8,12 +8,12 @@ import com.example.demo.model.Event;
 
 public interface EventService {
     List<Event> getAllEvents();
-    Optional<Event> getEventById(Long event_id);
+    Optional<Event> getEventById(Long eventId);
     Event createEvent(Event event);
-    Event updateEvent(Long event_id, Event event);
-    void deleteEvent(Long event_id);
+    Event updateEvent(Long eventId, Event event);
+    void deleteEvent(Long eventId);
     List<Event> searchByTitle(String title);
     List<Event> searchByStatus(String status);
-    List<Event> searchByStartDate(Date start_date);
+    List<Event> searchByStartDate(Date startDate);
     List<Event> searchByLocation(String location);
 }

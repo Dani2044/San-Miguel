@@ -24,21 +24,25 @@ import lombok.NoArgsConstructor;
 public class DonationReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long donation_report_id;
+    private Long donationReportId;
     @Column(nullable = false)
-    private String usage_description;
+    private String usageDescription;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date report_date;
+    private Date reportDate;
     private String image;
 
     @ManyToOne
-    @JoinColumn(name = "donation_id")
+    @JoinColumn(name = "donationId")
     private Donation donation;
 
-    public DonationReport(String usage_description, Date report_date, String image, Donation donation) {
-        this.usage_description = usage_description;
-        this.report_date = report_date;
+    @ManyToOne
+    @JoinColumn(name = "foundationId")
+    private Foundation foundation;
+
+    public DonationReport(String usageDescription, Date reportDate, String image, Donation donation) {
+        this.usageDescription = usageDescription;
+        this.reportDate = reportDate;
         this.image = image;
         this.donation = donation;
     }

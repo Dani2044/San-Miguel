@@ -32,8 +32,8 @@ public class DonationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Donation> getDonationById(@PathVariable("id") Long donation_id) {
-        return donationService.getDonationById(donation_id)
+    public ResponseEntity<Donation> getDonationById(@PathVariable("id") Long donationId) {
+        return donationService.getDonationById(donationId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -44,20 +44,20 @@ public class DonationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Donation> updateDonation(@PathVariable("id") Long donation_id,
+    public ResponseEntity<Donation> updateDonation(@PathVariable("id") Long donationId,
                                                    @RequestBody Donation donation) {
-        return ResponseEntity.ok(donationService.updateDonation(donation_id, donation));
+        return ResponseEntity.ok(donationService.updateDonation(donationId, donation));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDonation(@PathVariable("id") Long donation_id) {
-        donationService.deleteDonation(donation_id);
+    public ResponseEntity<Void> deleteDonation(@PathVariable("id") Long donationId) {
+        donationService.deleteDonation(donationId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/donor/{donor_id}")
-    public ResponseEntity<List<Donation>> searchByDonorId(@PathVariable Long donor_id) {
-        return ResponseEntity.ok(donationService.searchByDonorId(donor_id));
+    @GetMapping("/donor/{donorId}")
+    public ResponseEntity<List<Donation>> searchByDonorId(@PathVariable Long donorId) {
+        return ResponseEntity.ok(donationService.searchByDonorId(donorId));
     }
 
     @GetMapping("/date/{date}")

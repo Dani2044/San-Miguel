@@ -26,32 +26,32 @@ import lombok.NoArgsConstructor;
 public class Donation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long donation_id;
+    private Long donationId;
     @Column(nullable = false)
     private Float amount;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
     @Column(nullable = false)
-    private String payment_method;
+    private String paymentMethod;
     @Column(nullable = false)
     private String purpose;
 
     @ManyToOne
-    @JoinColumn(name = "foundation_id")
+    @JoinColumn(name = "foundationId")
     private Foundation foundation;
 
     @ManyToOne
-    @JoinColumn(name = "donor_id")
+    @JoinColumn(name = "donorId")
     private Donor donor;
 
     @OneToMany(mappedBy = "donation", cascade = CascadeType.ALL)
     private List<DonationReport> donationReports;
 
-    public Donation(Float amount, Date date, String payment_method, String purpose, Foundation foundation, Donor donor) {
+    public Donation(Float amount, Date date, String paymentMethod, String purpose, Foundation foundation, Donor donor) {
         this.amount = amount;
         this.date = date;
-        this.payment_method = payment_method;
+        this.paymentMethod = paymentMethod;
         this.purpose = purpose;
         this.foundation = foundation;
         this.donor = donor;

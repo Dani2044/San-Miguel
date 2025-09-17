@@ -7,10 +7,10 @@ import com.example.demo.model.Administrator;
 
 public interface AdministratorService {
     List<Administrator> getAllAdministrators();
-    Optional<Administrator> getAdministratorById(Long administrator_id);
+    Optional<Administrator> getAdministratorById(Long administratorId);
     Administrator createAdministrator(Administrator administrator);
-    Administrator updateAdministrator(Long administrator_id, Administrator administrator);
-    void deleteAdministrator(Long administrator_id);
+    Administrator updateAdministrator(Long administratorId, Administrator administrator);
+    void deleteAdministrator(Long administratorId);
     Optional<Administrator> searchByUsername(String username);
     Optional<Administrator> searchByEmail(String email);    
 }

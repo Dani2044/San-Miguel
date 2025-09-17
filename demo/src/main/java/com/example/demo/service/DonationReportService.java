@@ -8,10 +8,10 @@ import com.example.demo.model.DonationReport;
 
 public interface DonationReportService {
     List<DonationReport> getAllDonationReports();
-    Optional<DonationReport> getDonationReportById(Long donation_report_id);
+    Optional<DonationReport> getDonationReportById(Long donationReportId);
     DonationReport createDonationReport(DonationReport report);
-    DonationReport updateDonationReport(Long donation_report_id, DonationReport report);
-    void deleteDonationReport(Long donation_report_id);
-    List<DonationReport> searchByDonationId(Long donation_id);
-    List<DonationReport> searchByReportDate(Date report_date);
+    DonationReport updateDonationReport(Long donationReportId, DonationReport report);
+    void deleteDonationReport(Long donationReportId);
+    List<DonationReport> searchByDonationId(Long donationId);
+    List<DonationReport> searchByReportDate(Date reportDate);
 }

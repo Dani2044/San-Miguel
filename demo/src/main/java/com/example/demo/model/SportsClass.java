@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class SportsClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sports_class_id;
+    private Long sportsClassId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -29,7 +29,7 @@ public class SportsClass {
     private String schedule;
 
     @ManyToOne
-    @JoinColumn(name = "foundation_id")
+    @JoinColumn(name = "foundationId")
     private Foundation foundation;
 
     public SportsClass(String name, String description, String schedule, Foundation foundation) {

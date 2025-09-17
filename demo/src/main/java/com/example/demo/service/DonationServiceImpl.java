@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class DonationServiceImpl implements DonationService {
-    
+
     @Autowired
     private DonationRepository donationRepository;
 
@@ -22,8 +22,8 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public Optional<Donation> getDonationById(Long donation_id) {
-        return donationRepository.findById(donation_id);
+    public Optional<Donation> getDonationById(Long donationId) {
+        return donationRepository.findById(donationId);
     }
 
     @Override
@@ -32,29 +32,29 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public Donation updateDonation(Long donation_id, Donation donation) {
-        return donationRepository.findById(donation_id).map(existing -> {
+    public Donation updateDonation(Long donationId, Donation donation) {
+        return donationRepository.findById(donationId).map(existing -> {
             existing.setAmount(donation.getAmount());
             existing.setDate(donation.getDate());
-            existing.setPayment_method(donation.getPayment_method());
+            existing.setPaymentMethod(donation.getPaymentMethod());
             existing.setPurpose(donation.getPurpose());
             existing.setFoundation(donation.getFoundation());
             existing.setDonor(donation.getDonor());
             return donationRepository.save(existing);
-        }).orElseThrow(() -> new RuntimeException("Donation not found with id: " + donation_id));
+        }).orElseThrow(() -> new RuntimeException("Donation not found with id: " + donationId));
     }
 
     @Override
-    public void deleteDonation(Long donation_id) {
-        if (!donationRepository.existsById(donation_id)) {
-            throw new RuntimeException("Donation not found with id: " + donation_id);
+    public void deleteDonation(Long donationId) {
+        if (!donationRepository.existsById(donationId)) {
+            throw new RuntimeException("Donation not found with id: " + donationId);
         }
-        donationRepository.deleteById(donation_id);
+        donationRepository.deleteById(donationId);
     }
 
     @Override
-    public List<Donation> searchByDonorId(Long donor_id) {
-        return donationRepository.findByDonorDonorId(donor_id);
+    public List<Donation> searchByDonorId(Long donorId) {
+        return donationRepository.findByDonorDonorId(donorId);
     }
 
     @Override

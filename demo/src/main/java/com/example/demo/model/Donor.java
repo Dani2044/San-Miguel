@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Donor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long donor_id;
+    private Long donorId;
     private String name;
     private String type;
     private String email;

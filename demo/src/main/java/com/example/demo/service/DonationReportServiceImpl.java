@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class DonationReportServiceImpl implements DonationReportService {
-    
+
     @Autowired
     private DonationReportRepository donationReportRepository;
 
@@ -22,8 +22,8 @@ public class DonationReportServiceImpl implements DonationReportService {
     }
 
     @Override
-    public Optional<DonationReport> getDonationReportById(Long donation_report_id) {
-        return donationReportRepository.findById(donation_report_id);
+    public Optional<DonationReport> getDonationReportById(Long donationReportId) {
+        return donationReportRepository.findById(donationReportId);
     }
 
     @Override
@@ -32,31 +32,31 @@ public class DonationReportServiceImpl implements DonationReportService {
     }
 
     @Override
-    public DonationReport updateDonationReport(Long donation_report_id, DonationReport report) {
-        return donationReportRepository.findById(donation_report_id).map(existing -> {
-            existing.setUsage_description(report.getUsage_description());
-            existing.setReport_date(report.getReport_date());
+    public DonationReport updateDonationReport(Long donationReportId, DonationReport report) {
+        return donationReportRepository.findById(donationReportId).map(existing -> {
+            existing.setUsageDescription(report.getUsageDescription());
+            existing.setReportDate(report.getReportDate());
             existing.setImage(report.getImage());
             existing.setDonation(report.getDonation());
             return donationReportRepository.save(existing);
-        }).orElseThrow(() -> new RuntimeException("DonationReport not found with id: " + donation_report_id));
+        }).orElseThrow(() -> new RuntimeException("DonationReport not found with id: " + donationReportId));
     }
 
     @Override
-    public void deleteDonationReport(Long donation_report_id) {
-        if (!donationReportRepository.existsById(donation_report_id)) {
-            throw new RuntimeException("DonationReport not found with id: " + donation_report_id);
+    public void deleteDonationReport(Long donationReportId) {
+        if (!donationReportRepository.existsById(donationReportId)) {
+            throw new RuntimeException("DonationReport not found with id: " + donationReportId);
         }
-        donationReportRepository.deleteById(donation_report_id);
+        donationReportRepository.deleteById(donationReportId);
     }
 
     @Override
-    public List<DonationReport> searchByDonationId(Long donation_id) {
-        return donationReportRepository.findByDonationDonationId(donation_id);
+    public List<DonationReport> searchByDonationId(Long donationId) {
+        return donationReportRepository.findByDonationDonationId(donationId);
     }
 
     @Override
-    public List<DonationReport> searchByReportDate(Date report_date) {
-        return donationReportRepository.findByReportDate(report_date);
+    public List<DonationReport> searchByReportDate(Date reportDate) {
+        return donationReportRepository.findByReportDate(reportDate);
     }
 }

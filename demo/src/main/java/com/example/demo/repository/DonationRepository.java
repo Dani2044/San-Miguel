@@ -10,6 +10,6 @@ import com.example.demo.model.Donation;
 
 @Repository
 public interface DonationRepository extends JpaRepository<Donation, Long> {
-    List<Donation> findByDonorDonorId(Long donor_id);
+    List<Donation> findByDonorDonorId(Long donorId);
     List<Donation> findByDate(Date date);
 }

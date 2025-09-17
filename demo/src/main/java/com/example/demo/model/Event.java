@@ -23,37 +23,37 @@ import lombok.NoArgsConstructor;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long event_id;
+    private Long eventId;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date start_date;
+    private Date startDate;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date end_date;
+    private Date endDate;
     @Column(nullable = false)
     private String location;
-    private String promotional_image;
+    private String promotionalImage;
     @Column(nullable = false)
     private String status;
-    private String publication_url;
+    private String publicationUrl;
 
     @ManyToOne
-    @JoinColumn(name = "foundation_id")
+    @JoinColumn(name = "foundationId")
     private Foundation foundation;
 
-    public Event(String title, String description, Date start_date, Date end_date, String location, String promotional_image, String status, String publication_url, Foundation foundation) {
+    public Event(String title, String description, Date startDate, Date endDate, String location, String promotionalImage, String status, String publicationUrl, Foundation foundation) {
         this.title = title;
         this.description = description;
-        this.start_date = start_date;
-        this.end_date = end_date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.location = location;
-        this.promotional_image = promotional_image;
+        this.promotionalImage = promotionalImage;
         this.status = status;
-        this.publication_url = publication_url;
+        this.publicationUrl = publicationUrl;
         this.foundation = foundation;
     }
 }
