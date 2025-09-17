@@ -1,5 +1,5 @@
 package com.example.demo.security;
-/*
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,19 +19,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthEntryPoint jwtAuthEntryPoint;
+    private JWTAuthEntryPoint jwtAuthEntryPoint;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.
-                csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/auth/inicio_sesion").permitAll()
-                        .requestMatchers("/api/testimonios").permitAll()
-                        .requestMatchers("/api/servicios").permitAll()
-                        .requestMatchers("/factura/crear/medicamentos").permitAll()
+                        .requestMatchers("/api/administrators/login").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
 
@@ -45,7 +41,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration ) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -54,4 +50,3 @@ public class SecurityConfig {
         return new JWTAuthenticationFilter();
     }
 }
-*/

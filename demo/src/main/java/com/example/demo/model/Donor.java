@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Donor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long donor_id;
     private String name;
     private String type;
     private String email;
@@ -31,4 +31,12 @@ public class Donor {
 
     @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
     private List<Donation> donations;
+
+    public Donor(String name, String type, String email, Integer phone, Boolean anonymous) {
+        this.name = name;
+        this.type = type;
+        this.email = email;
+        this.phone = phone;
+        this.anonymous = anonymous;
+    }
 }

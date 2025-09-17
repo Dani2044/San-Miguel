@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long administrator_id;
     @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false)
@@ -34,7 +35,19 @@ public class Administrator {
     @Column(nullable = false)
     private String phone;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserEntity userEntity;
+
     @OneToOne
     @JoinColumn(name = "foundation_id", unique = true)
     private Foundation foundation;
+
+    public Administrator(String username, String password, String name, String email, String photo, String phone) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.photo = photo;
+        this.phone = phone;
+    }
 }

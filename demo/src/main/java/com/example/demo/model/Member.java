@@ -20,11 +20,11 @@ import jakarta.persistence.ManyToOne;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long member_id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String role;
+    private String position;
     @Column(nullable = false)
     private String responsibilities;
     @Column(nullable = false)
@@ -37,4 +37,14 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "foundation_id")
     private Foundation foundation;
+
+    public Member(String name, String position, String responsibilities, String photo, String email, String phone, Foundation foundation) {
+        this.name = name;
+        this.position = position;
+        this.responsibilities = responsibilities;
+        this.photo = photo;
+        this.email = email;
+        this.phone = phone;
+        this.foundation = foundation;
+    }
 }

@@ -22,7 +22,7 @@ import jakarta.persistence.OneToOne;
 public class Foundation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long foundation_id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -49,4 +49,11 @@ public class Foundation {
 
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
     private List<SportsClass> sportsClasses;
+
+    public Foundation(String name, String mission, String vision, String history) {
+        this.name = name;
+        this.mission = mission;
+        this.vision = vision;
+        this.history = history;
+    }
 }
