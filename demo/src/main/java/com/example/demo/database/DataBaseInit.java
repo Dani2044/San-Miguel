@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.database;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +10,16 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
+import com.example.demo.model.Administrator;
+import com.example.demo.model.Donation;
+import com.example.demo.model.DonationReport;
+import com.example.demo.model.Foundation;
+import com.example.demo.model.Member;
+import com.example.demo.model.Role;
+import com.example.demo.model.SportsClass;
+import com.example.demo.model.UserEntity;
+import com.example.demo.model.Donor;
+import com.example.demo.model.Event;
 import com.example.demo.repository.AdministratorRepository;
 import com.example.demo.repository.DonationRepository;
 import com.example.demo.repository.DonationReportRepository;
