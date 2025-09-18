@@ -35,7 +35,8 @@ public class AdministratorController {
     // TODO: Poner como comentario las urls para mayor facilidad.
     // TODO: Realizar el perfil de producción y probar con una base de datos real (en application.properties está la idea de cómo hacerlo en PostgreSQL, la dependencia ya está en pom.xml).
     // TODO: Realizar validación de tipos de dato y restricciones básicas en todos los controladores. Ejemplo: No se recibe NULL en algunos datos.
-    // TODO: Crear DTOs para información de Donors y Administrator (muy importante para seguridad)
+    // TODO: Crear DTOs para información de Donors y Administrator (muy importante para seguridad).
+    // TODO: Crear error handlers para NotFound, Bad Request, Internal Server Error, etc.
     @Autowired
     private AdministratorService administratorService;
 

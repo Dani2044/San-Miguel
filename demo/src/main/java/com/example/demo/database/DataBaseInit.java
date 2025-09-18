@@ -2,6 +2,7 @@ package com.example.demo.database;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -89,58 +90,47 @@ public class DataBaseInit implements ApplicationRunner {
         );
         foundationRepository.save(foundation);
 
-        // 3. Create UserEntity for admin
-        UserEntity adminUser = UserEntity.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin123"))
-                .roles(Arrays.asList(adminRole))
-                .build();
-        userRepository.save(adminUser);
-
-        // 4. Create Administrator
+        // 3. Create Administrator
         Administrator admin = new Administrator(
                 "admin",
-                passwordEncoder.encode("admin123"),
+                "admin123",
                 "Carlos Ramírez",
                 "admin@fundacionsanmiguel.org",
                 "https://randomuser.me/api/portraits/men/32.jpg",
                 "+57 3104567890"
         );
+
+        UserEntity adminUser = saveAdministrator(admin);
         admin.setUserEntity(adminUser);
         admin.setFoundation(foundation);
         administratorRepository.save(admin);
 
-        // 5. Create sample donor + linked user
-        UserEntity donorUser = UserEntity.builder()
-                .username("donor1")
-                .password(passwordEncoder.encode("donor123"))
-                .roles(Arrays.asList(donorRole))
-                .build();
-        userRepository.save(donorUser);
-
-        Donor donor1 = new Donor(
-                "Fundación Amigos de Cajicá",
-                "contacto@amigosdecajica.org",
-                1234567,
-                "https://randomuser.me/api/portraits/men/70.jpg",
-                "donor1",
-                "donor123"
+        // 4. Create multiple donors
+        List<Donor> donors = Arrays.asList(
+                new Donor("Fundación Amigos de Cajicá", "contacto1@amigosdecajica.org", 1234567, "https://randomuser.me/api/portraits/men/70.jpg", "donor1", "donor123"),
+                new Donor("Fundación Manos Solidarias", "contacto2@manossolidarias.org", 2345678, "https://randomuser.me/api/portraits/women/65.jpg", "donor2", "donor123"),
+                new Donor("Fundación Corazones Unidos", "contacto3@corazonesunidos.org", 3456789, "https://randomuser.me/api/portraits/men/75.jpg", "donor3", "donor123"),
+                new Donor("Fundación Niños Felices", "contacto4@ninosfelices.org", 4567890, "https://randomuser.me/api/portraits/women/72.jpg", "donor4", "donor123")
         );
-        donor1.setUser(donorUser);
-        donorRepository.save(donor1);
 
-        // 6. Create donation
+        for (Donor donor : donors) {
+                UserEntity donorUser = saveDonor(donor);
+                donor.setUserEntity(donorUser);
+                donorRepository.save(donor);
+        }
+
+        // 5. Create donation
         Donation donation1 = new Donation(
                 500000f,
                 new Date(),
                 "Bank Transfer",
                 "Support for sports programs",
                 foundation,
-                donor1
+                donors.get(0)
         );
         donationRepository.save(donation1);
 
-        // 7. Donation report
+        // 6. Donation report
         DonationReport report1 = new DonationReport(
                 "The funds were used to buy soccer uniforms.",
                 new Date(),
@@ -149,7 +139,7 @@ public class DataBaseInit implements ApplicationRunner {
         );
         donationReportRepository.save(report1);
 
-        // 8. Events
+        // 7. Events
         Event event1 = new Event(
                 "Community Integration Day",
                 "An event for families to enjoy games, music, and workshops.",
@@ -163,7 +153,7 @@ public class DataBaseInit implements ApplicationRunner {
         );
         eventRepository.save(event1);
 
-        // 9. Members
+        // 8. Members
         Member member1 = new Member(
                 "María Gómez",
                 "Coordinator",
@@ -184,7 +174,7 @@ public class DataBaseInit implements ApplicationRunner {
         );
         memberRepository.saveAll(Arrays.asList(member1, member2));
 
-        // 10. Sports classes
+        // 9. Sports classes
         SportsClass soccer = new SportsClass(
                 "Soccer School",
                 "Training program for children 7-14 years old.",
@@ -198,5 +188,27 @@ public class DataBaseInit implements ApplicationRunner {
                 foundation
         );
         sportsClassRepository.saveAll(Arrays.asList(soccer, dance));
+    }
+
+    private UserEntity saveAdministrator(Administrator admin){
+        UserEntity user = new UserEntity();
+        user.setUsername(admin.getUsername());
+        user.setPassword(passwordEncoder.encode(admin.getPassword()));
+        Role role = roleRepository.findByName("ADMIN").orElseThrow(() -> 
+                new RuntimeException("Role ADMIN not found")
+        );
+        user.setRoles(List.of(role));
+        return userRepository.save(user);
+    }
+    
+    private UserEntity saveDonor(Donor donor){
+        UserEntity user = new UserEntity();
+        user.setUsername(donor.getUsername());
+        user.setPassword(passwordEncoder.encode(donor.getPassword()));
+        Role role = roleRepository.findByName("DONOR").orElseThrow(() -> 
+                new RuntimeException("Role DONOR not found")
+        );
+        user.setRoles(List.of(role));
+        return userRepository.save(user);
     }
 }

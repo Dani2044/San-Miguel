@@ -97,7 +97,7 @@ public class DonorController {
         }
 
         UserEntity userEntity = customUserDetailsService.donorToUser(donor);
-        donor.setUser(userEntity);
+        donor.setUserEntity(userEntity);
 
         donorService.createDonor(donor);
         return ResponseEntity.ok("Donor created successfully");

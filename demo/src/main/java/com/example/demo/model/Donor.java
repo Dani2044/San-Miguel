@@ -43,7 +43,7 @@ public class Donor {
 
     @OneToOne
     @JoinColumn(name = "user_id_user")
-    private UserEntity user;
+    private UserEntity userEntity;
 
     @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL)
     private List<Donation> donations;
