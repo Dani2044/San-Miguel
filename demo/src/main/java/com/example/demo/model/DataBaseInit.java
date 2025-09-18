@@ -67,6 +67,8 @@ public class DataBaseInit implements ApplicationRunner {
         // 1. Create role
         Role adminRole = new Role("ADMIN");
         roleRepository.save(adminRole);
+        Role donorRole = new Role("DONOR"); 
+        roleRepository.save(donorRole);
 
         // 2. Create foundation
         Foundation foundation = new Foundation(
@@ -85,7 +87,7 @@ public class DataBaseInit implements ApplicationRunner {
                 .build();
         userRepository.save(adminUser);
 
-        // 4. Create Administrator and link foundation + user
+        // 4. Create Administrator
         Administrator admin = new Administrator(
                 "admin",
                 passwordEncoder.encode("admin123"),
@@ -98,7 +100,60 @@ public class DataBaseInit implements ApplicationRunner {
         admin.setFoundation(foundation);
         administratorRepository.save(admin);
 
-        // 5. Create sample members
+        // 5. Create sample donor + linked user
+        UserEntity donorUser = UserEntity.builder()
+                .username("donor1")
+                .password(passwordEncoder.encode("donor123"))
+                .roles(Arrays.asList(donorRole))
+                .build();
+        userRepository.save(donorUser);
+
+        Donor donor1 = new Donor(
+                "Fundación Amigos de Cajicá",
+                "contacto@amigosdecajica.org",
+                1234567,
+                "https://randomuser.me/api/portraits/men/70.jpg",
+                "donor1",
+                "donor123"
+        );
+        donor1.setUser(donorUser);
+        donorRepository.save(donor1);
+
+        // 6. Create donation
+        Donation donation1 = new Donation(
+                500000f,
+                new Date(),
+                "Bank Transfer",
+                "Support for sports programs",
+                foundation,
+                donor1
+        );
+        donationRepository.save(donation1);
+
+        // 7. Donation report
+        DonationReport report1 = new DonationReport(
+                "The funds were used to buy soccer uniforms.",
+                new Date(),
+                "https://example.com/uniforms.jpg",
+                donation1
+        );
+        donationReportRepository.save(report1);
+
+        // 8. Events
+        Event event1 = new Event(
+                "Community Integration Day",
+                "An event for families to enjoy games, music, and workshops.",
+                new Date(),
+                new Date(),
+                "Cajicá Main Park",
+                "https://example.com/event1.jpg",
+                "PLANNED",
+                "https://facebook.com/fundacionsanmiguel/events/1",
+                foundation
+        );
+        eventRepository.save(event1);
+
+        // 9. Members
         Member member1 = new Member(
                 "María Gómez",
                 "Coordinator",
@@ -119,7 +174,7 @@ public class DataBaseInit implements ApplicationRunner {
         );
         memberRepository.saveAll(Arrays.asList(member1, member2));
 
-        // 6. Create sample sports classes
+        // 10. Sports classes
         SportsClass soccer = new SportsClass(
                 "Soccer School",
                 "Training program for children 7-14 years old.",
@@ -133,44 +188,5 @@ public class DataBaseInit implements ApplicationRunner {
                 foundation
         );
         sportsClassRepository.saveAll(Arrays.asList(soccer, dance));
-
-        // 7. Create donors
-        Donor donor1 = new Donor("Fundación Amigos de Cajicá", "Organization",
-                "contacto@amigosdecajica.org", 1234567, false);
-        donorRepository.save(donor1);
-
-        // 8. Create donations
-        Donation donation1 = new Donation(
-                500000f,
-                new Date(),
-                "Bank Transfer",
-                "Support for sports programs",
-                foundation,
-                donor1
-        );
-        donationRepository.save(donation1);
-
-        // 9. Create donation report
-        DonationReport report1 = new DonationReport(
-                "The funds were used to buy soccer uniforms.",
-                new Date(),
-                "https://example.com/uniforms.jpg",
-                donation1
-        );
-        donationReportRepository.save(report1);
-
-        // 10. Create events
-        Event event1 = new Event(
-                "Community Integration Day",
-                "An event for families to enjoy games, music, and workshops.",
-                new Date(),
-                new Date(),
-                "Cajicá Main Park",
-                "https://example.com/event1.jpg",
-                "PLANNED",
-                "https://facebook.com/fundacionsanmiguel/events/1",
-                foundation
-        );
-        eventRepository.save(event1);
     }
 }

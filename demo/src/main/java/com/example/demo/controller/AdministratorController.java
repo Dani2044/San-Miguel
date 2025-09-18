@@ -31,7 +31,8 @@ import java.util.Optional;
 @RequestMapping("/api/administrators")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AdministratorController {
-    // TODO: Verificar funcionamiento del sistema en http://localhost:8080/h2-console y Postman.
+    // TODO: Verificar funcionamiento del sistema en http://localhost:8080/h2-console y Postman teniendo en cuenta la autorización.
+    // TODO: Poner como comentario las urls para mayor facilidad.
     // TODO: Realizar el perfil de producción y probar con una base de datos real (en application.properties está la idea de cómo hacerlo en PostgreSQL, la dependencia ya está en pom.xml).
     // TODO: Realizar validación de tipos de dato y restricciones básicas en todos los controladores. Ejemplo: No se recibe NULL en algunos datos.
     @Autowired

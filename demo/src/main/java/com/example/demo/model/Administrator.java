@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,10 +24,6 @@ public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long administratorId;
-    @Column(nullable = false, unique = true)
-    private String username;
-    @Column(nullable = false)
-    private String password;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -35,6 +32,11 @@ public class Administrator {
     private String photo;
     @Column(nullable = false)
     private String phone;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+    @Transient
+    private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
     private UserEntity userEntity;

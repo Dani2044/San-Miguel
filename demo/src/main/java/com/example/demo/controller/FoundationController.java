@@ -21,7 +21,7 @@ public class FoundationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Foundation> updateFoundation(
-            @PathVariable("id") Long id,
+            @PathVariable Long id,
             @RequestBody Foundation foundation) {
         try {
             Foundation updatedFoundation = foundationService.updateFoundation(id, foundation);

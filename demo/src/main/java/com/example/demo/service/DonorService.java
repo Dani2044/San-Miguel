@@ -8,9 +8,10 @@ import com.example.demo.model.Donor;
 public interface DonorService {
     List<Donor> getAllDonors();
     Optional<Donor> getDonorById(Long id);
+    Optional<Donor> searchByUsername(String username);
     Donor createDonor(Donor donor);
     Donor updateDonor(Long id, Donor donor);
     void deleteDonor(Long id);
     Optional<Donor> searchByEmail(String email);
-    List<Donor> searchByAnonymous(Boolean anonymous);
+    List<Donor> searchByName(String name);
 }

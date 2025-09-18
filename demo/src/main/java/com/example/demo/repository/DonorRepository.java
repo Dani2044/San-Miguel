@@ -11,5 +11,6 @@ import com.example.demo.model.Donor;
 @Repository
 public interface DonorRepository extends JpaRepository<Donor, Long> {
     Optional<Donor> findByEmail(String email);
-    List<Donor> findByAnonymous(Boolean anonymous);
+    Optional<Donor> findByUsername(String username);
+    List<Donor> findByNameContainingIgnoreCase(String name);
 }

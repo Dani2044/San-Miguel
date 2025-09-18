@@ -27,6 +27,11 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
+    public Optional<Donor> searchByUsername(String username) {
+        return donorRepository.findByUsername(username);
+    }
+
+    @Override
     public Donor createDonor(Donor donor) {
         return donorRepository.save(donor);
     }
@@ -37,7 +42,9 @@ public class DonorServiceImpl implements DonorService {
             existingDonor.setName(donor.getName());
             existingDonor.setEmail(donor.getEmail());
             existingDonor.setPhone(donor.getPhone());
-            existingDonor.setAnonymous(donor.getAnonymous());
+            existingDonor.setPhoto(donor.getPhoto());
+            existingDonor.setUsername(donor.getUsername());
+            existingDonor.setPassword(donor.getPassword());
             return donorRepository.save(existingDonor);
         }).orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
     }
@@ -53,7 +60,7 @@ public class DonorServiceImpl implements DonorService {
     }
 
     @Override
-    public List<Donor> searchByAnonymous(Boolean anonymous) {
-        return donorRepository.findByAnonymous(anonymous);
+    public List<Donor> searchByName(String name) {
+        return donorRepository.findByNameContainingIgnoreCase(name);
     }
 }

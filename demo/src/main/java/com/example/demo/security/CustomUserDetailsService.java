@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.model.Administrator;
+import com.example.demo.model.Donor;
 import com.example.demo.model.Role;
 import com.example.demo.model.UserEntity;
 import com.example.demo.repository.RoleRepository;
@@ -45,12 +46,26 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    // ---------- ADMIN ----------
     public UserEntity adminToUser(Administrator administrator) {
         UserEntity user = new UserEntity();
         user.setUsername(administrator.getUsername());
         user.setPassword(passwordEncoder.encode(administrator.getPassword()));
 
-        Role role = roleRepository.findByName("ADMIN").get();
+        Role role = roleRepository.findByName("ADMIN")
+                .orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
+        user.setRoles(List.of(role));
+        return user;
+    }
+
+    // ---------- DONOR ----------
+    public UserEntity donorToUser(Donor donor) {
+        UserEntity user = new UserEntity();
+        user.setUsername(donor.getUsername());
+        user.setPassword(passwordEncoder.encode(donor.getPassword()));
+
+        Role role = roleRepository.findByName("DONOR")
+                .orElseThrow(() -> new RuntimeException("Role DONOR not found"));
         user.setRoles(List.of(role));
         return user;
     }
