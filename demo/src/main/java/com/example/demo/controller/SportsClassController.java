@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.SportsClass;
+import com.example.demo.dto.SportsClassDTO;
 import com.example.demo.service.SportsClassService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,26 +25,26 @@ public class SportsClassController {
     private final SportsClassService sportsClassService;
 
     @GetMapping
-    public List<SportsClass> getAllSportsClasses() {
+    public List<SportsClassDTO> getAllSportsClasses() {
         return sportsClassService.getAllSportsClasses();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SportsClass> getSportsClassById(@PathVariable Long id) {
+    public ResponseEntity<SportsClassDTO> getSportsClassById(@PathVariable Long id) {
         return sportsClassService.getSportsClassById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public SportsClass createSportsClass(@RequestBody SportsClass sportsClass) {
+    public SportsClassDTO createSportsClass(@RequestBody SportsClassDTO sportsClass) {
         return sportsClassService.createSportsClass(sportsClass);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SportsClass> updateSportsClass(
+    public ResponseEntity<SportsClassDTO> updateSportsClass(
             @PathVariable Long id,
-            @RequestBody SportsClass sportsClass) {
+            @RequestBody SportsClassDTO sportsClass) {
         try {
             return ResponseEntity.ok(sportsClassService.updateSportsClass(id, sportsClass));
         } catch (RuntimeException e) {
@@ -60,10 +60,11 @@ public class SportsClassController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+
     }
 
     @GetMapping("/search/{name}")
-    public List<SportsClass> searchByName(@PathVariable String name) {
+    public List<SportsClassDTO> searchByName(@PathVariable String name) {
         return sportsClassService.searchByName(name);
     }
 }

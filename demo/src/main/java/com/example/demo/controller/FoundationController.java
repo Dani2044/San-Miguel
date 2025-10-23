@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.Foundation;
+import com.example.demo.dto.FoundationDTO;
 import com.example.demo.service.FoundationService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,11 +20,11 @@ public class FoundationController {
     private final FoundationService foundationService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<Foundation> updateFoundation(
+    public ResponseEntity<FoundationDTO> updateFoundation(
             @PathVariable Long id,
-            @RequestBody Foundation foundation) {
+            @RequestBody FoundationDTO foundation) {
         try {
-            Foundation updatedFoundation = foundationService.updateFoundation(id, foundation);
+            FoundationDTO updatedFoundation = foundationService.updateFoundation(id, foundation);
             return ResponseEntity.ok(updatedFoundation);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

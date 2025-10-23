@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.Member;
+import com.example.demo.dto.MemberDTO;
 import com.example.demo.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,24 +25,24 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping
-    public List<Member> getAllMembers() {
+    public List<MemberDTO> getAllMembers() {
         return memberService.getAllMembers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> getMemberById(@PathVariable Long id) {
+    public ResponseEntity<MemberDTO> getMemberById(@PathVariable Long id) {
         return memberService.getMemberById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Member createMember(@RequestBody Member member) {
+    public MemberDTO createMember(@RequestBody MemberDTO member) {
         return memberService.createMember(member);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member member) {
+    public ResponseEntity<MemberDTO> updateMember(@PathVariable Long id, @RequestBody MemberDTO member) {
         try {
             return ResponseEntity.ok(memberService.updateMember(id, member));
         } catch (RuntimeException e) {
@@ -61,12 +61,12 @@ public class MemberController {
     }
 
     @GetMapping("/search/position/{position}")
-    public List<Member> searchByPosition(@PathVariable String position) {
+    public List<MemberDTO> searchByPosition(@PathVariable String position) {
         return memberService.searchByPosition(position);
     }
 
     @GetMapping("/search/email/{email}")
-    public ResponseEntity<Member> searchByEmail(@PathVariable String email) {
+    public ResponseEntity<MemberDTO> searchByEmail(@PathVariable String email) {
         return memberService.searchByEmail(email)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
