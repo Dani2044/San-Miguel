@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -33,14 +34,17 @@ public class Foundation {
     private String history;
 
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Member> members;
 
 
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Event> events;
 
 
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<SportsClass> sportsClasses;
 
     public Foundation(String name, String mission, String vision, String history) {
