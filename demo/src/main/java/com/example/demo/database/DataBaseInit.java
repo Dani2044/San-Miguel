@@ -15,6 +15,8 @@ import com.example.demo.repository.FoundationRepository;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.SportsClassRepository;
 import jakarta.transaction.Transactional;
+import java.text.SimpleDateFormat;
+
 
 @Component
 @Transactional
@@ -50,13 +52,27 @@ public class DataBaseInit implements ApplicationRunner {
             new Date(),
             new Date(),
             "Parque Principal de Cajicá",
-            "https://example.com/evento1.jpg",
+            "672eeff8-5de4-464a-b4e6-25a56b924bc0.jpeg",
             "PLANIFICADO", 
             "https://facebook.com/fundacionsanmiguel/events/1",
             foundation
         );
         eventRepository.save(event1);
-        
+        // ... dentro del método run(...)
+
+        // nuevo evento seed
+        Event event2 = new Event(
+            "Torneo Comunitario de Verano",
+            "Competencia deportiva abierta para la comunidad, con premiaciones y actividades familiares.",
+            new SimpleDateFormat("yyyy-MM-dd").parse("2025-12-15"), // startDate
+            new SimpleDateFormat("yyyy-MM-dd").parse("2025-12-16"), // endDate
+            "Cancha Municipal",
+            "https://example.com/evento2.jpg",
+            "PLANIFICADO",
+            "https://facebook.com/fundacionsanmiguel/events/2",
+            foundation
+        );
+        eventRepository.save(event2);
 
         // 3) Members
         Member member1 = new Member(
