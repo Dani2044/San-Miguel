@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+
 
 @Entity
 @Data
@@ -32,20 +32,13 @@ public class Foundation {
     @Column(nullable = false)
     private String history;
 
-    @OneToOne(mappedBy = "foundation", cascade = CascadeType.ALL)
-    private Administrator administrator;
-
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
     private List<Member> members;
 
-    @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
-    private List<Donation> donations;
 
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
     private List<Event> events;
 
-    @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
-    private List<DonationReport> donationReports;
 
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
     private List<SportsClass> sportsClasses;

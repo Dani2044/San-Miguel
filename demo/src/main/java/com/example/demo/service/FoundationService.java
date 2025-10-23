@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Foundation;
+import com.example.demo.dto.FoundationDTO;
 
 public interface FoundationService {
-    Foundation updateFoundation(Long foundationId, Foundation foundation);
+    FoundationDTO updateFoundation(Long foundationId, FoundationDTO foundation);
 }

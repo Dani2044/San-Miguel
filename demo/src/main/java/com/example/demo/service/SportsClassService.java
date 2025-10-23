@@ -3,13 +3,13 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.demo.model.SportsClass;
+import com.example.demo.dto.SportsClassDTO;
 
 public interface SportsClassService {
-    List<SportsClass> getAllSportsClasses();
-    Optional<SportsClass> getSportsClassById(Long sportsClassId);
-    SportsClass createSportsClass(SportsClass sportsClass);
-    SportsClass updateSportsClass(Long sportsClassId, SportsClass sportsClass);
+    List<SportsClassDTO> getAllSportsClasses();
+    Optional<SportsClassDTO> getSportsClassById(Long sportsClassId);
+    SportsClassDTO createSportsClass(SportsClassDTO sportsClass);
+    SportsClassDTO updateSportsClass(Long sportsClassId, SportsClassDTO sportsClass);
     void deleteSportsClass(Long sportsClassId);
-    List<SportsClass> searchByName(String name);
+    List<SportsClassDTO> searchByName(String name);
 }

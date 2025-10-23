@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Event;
 import com.example.demo.repository.EventRepository;
+import com.example.demo.dto.EventDTO;
+import com.example.demo.mapper.EventMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +22,18 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
+    }
+
+    @Override
+    public EventDTO setPromotionalImage(Long eventId, String url) {
+        Event updated = eventRepository.findById(eventId)
+                .map(e -> {
+                    e.setPromotionalImage(url);
+                    return eventRepository.save(e);
+                })
+                .orElseThrow(() -> new RuntimeException("Event not found with id: " + eventId));
+
+        return EventMapper.toDTO(updated);
     }
 
     @Override

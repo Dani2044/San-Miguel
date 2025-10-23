@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.demo.model.Event;
+import com.example.demo.dto.EventDTO;
 
 public interface EventService {
     List<Event> getAllEvents();
@@ -16,4 +17,5 @@ public interface EventService {
     List<Event> searchByStatus(String status);
     List<Event> searchByStartDate(Date startDate);
     List<Event> searchByLocation(String location);
+    EventDTO setPromotionalImage(Long eventId, String url);
 }

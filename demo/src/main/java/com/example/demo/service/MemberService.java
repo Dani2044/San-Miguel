@@ -3,14 +3,14 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.demo.model.Member;
+import com.example.demo.dto.MemberDTO;
 
 public interface MemberService {
-    List<Member> getAllMembers();
-    Optional<Member> getMemberById(Long memberId);
-    Member createMember(Member member);
-    Member updateMember(Long memberId, Member member);
+    List<MemberDTO> getAllMembers();
+    Optional<MemberDTO> getMemberById(Long memberId);
+    MemberDTO createMember(MemberDTO member);
+    MemberDTO updateMember(Long memberId, MemberDTO member);
     void deleteMember(Long memberId);
-    List<Member> searchByPosition(String position);
-    Optional<Member> searchByEmail(String email);
+    List<MemberDTO> searchByPosition(String position);
+    Optional<MemberDTO> searchByEmail(String email);
 }

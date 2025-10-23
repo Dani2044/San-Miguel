@@ -2,10 +2,15 @@ package com.example.demo.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.MemberDTO;
+import com.example.demo.mapper.MemberMapper;
+import com.example.demo.model.Foundation;
 import com.example.demo.model.Member;
+import com.example.demo.repository.FoundationRepository;
 import com.example.demo.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,34 +20,55 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final FoundationRepository foundationRepository;
 
     @Override
-    public List<Member> getAllMembers() {
-        return memberRepository.findAll();
+    public List<MemberDTO> getAllMembers() {
+        return memberRepository.findAll().stream().map(MemberMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Member> getMemberById(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Optional<MemberDTO> getMemberById(Long memberId) {
+        return memberRepository.findById(memberId).map(MemberMapper::toDTO);
     }
 
     @Override
-    public Member createMember(Member member) {
-        return memberRepository.save(member);
+    public MemberDTO createMember(MemberDTO memberDto) {
+        Member m = Member.builder()
+                .name(memberDto.name())
+                .position(memberDto.position())
+                .responsibilities(memberDto.responsibilities())
+                .photo(memberDto.photo())
+                .email(memberDto.email())
+                .phone(memberDto.phone())
+                .build();
+
+        if (memberDto.foundationId() != null) {
+            Foundation f = foundationRepository.findById(memberDto.foundationId())
+                    .orElseThrow(() -> new RuntimeException("Foundation not found: " + memberDto.foundationId()));
+            m.setFoundation(f);
+        }
+
+        Member saved = memberRepository.save(m);
+        return MemberMapper.toDTO(saved);
     }
 
     @Override
-    public Member updateMember(Long memberId, Member member) {
+    public MemberDTO updateMember(Long memberId, MemberDTO memberDto) {
         return memberRepository.findById(memberId)
                 .map(existingMember -> {
-                    existingMember.setName(member.getName());
-                    existingMember.setPosition(member.getPosition());
-                    existingMember.setResponsibilities(member.getResponsibilities());
-                    existingMember.setPhoto(member.getPhoto());
-                    existingMember.setEmail(member.getEmail());
-                    existingMember.setPhone(member.getPhone());
-                    existingMember.setFoundation(member.getFoundation());
-                    return memberRepository.save(existingMember);
+                    if (memberDto.name() != null) existingMember.setName(memberDto.name());
+                    if (memberDto.position() != null) existingMember.setPosition(memberDto.position());
+                    if (memberDto.responsibilities() != null) existingMember.setResponsibilities(memberDto.responsibilities());
+                    if (memberDto.photo() != null) existingMember.setPhoto(memberDto.photo());
+                    if (memberDto.email() != null) existingMember.setEmail(memberDto.email());
+                    if (memberDto.phone() != null) existingMember.setPhone(memberDto.phone());
+                    if (memberDto.foundationId() != null) {
+                        Foundation f = foundationRepository.findById(memberDto.foundationId())
+                                .orElseThrow(() -> new RuntimeException("Foundation not found: " + memberDto.foundationId()));
+                        existingMember.setFoundation(f);
+                    }
+                    return MemberMapper.toDTO(memberRepository.save(existingMember));
                 })
                 .orElseThrow(() -> new RuntimeException("Member not found with id: " + memberId));
     }
@@ -56,12 +82,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> searchByPosition(String position) {
-        return memberRepository.findByPosition(position);
+    public List<MemberDTO> searchByPosition(String position) {
+        return memberRepository.findByPosition(position).stream().map(MemberMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Member> searchByEmail(String email) {
-        return memberRepository.findByEmail(email);
+    public Optional<MemberDTO> searchByEmail(String email) {
+        return memberRepository.findByEmail(email).map(MemberMapper::toDTO);
     }
 }
