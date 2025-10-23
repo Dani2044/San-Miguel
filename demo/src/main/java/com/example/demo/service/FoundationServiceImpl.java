@@ -17,10 +17,6 @@ public class FoundationServiceImpl implements FoundationService {
     public FoundationDTO updateFoundation(Long foundationId, FoundationDTO foundation) {
         Foundation updated = foundationRepository.findById(foundationId)
                 .map(existingFoundation -> {
-                    existingFoundation.setName(foundation.name());
-                    existingFoundation.setMission(foundation.mission());
-                    existingFoundation.setVision(foundation.vision());
-                    existingFoundation.setHistory(foundation.history());
                     return foundationRepository.save(existingFoundation);
                 })
                 .orElseThrow(() -> new RuntimeException("Foundation not found with id: " + foundationId));

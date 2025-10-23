@@ -17,15 +17,11 @@ public final class FoundationMapper {
     List<Long> sportsClassIds = (f.getSportsClasses() == null) ? List.of() : f.getSportsClasses().stream()
         .map(s -> s.getSportsClassId()).collect(Collectors.toList());
 
-    return new FoundationDTO(
-        f.getFoundationId(),
-        f.getName(),
-        f.getMission(),
-        f.getVision(),
-        f.getHistory(),
-        memberIds,
-        eventIds,
-        sportsClassIds
-    );
+  return new FoundationDTO(
+    f.getFoundationId(),
+    memberIds,
+    eventIds,
+    sportsClassIds
+  );
   }
 }
