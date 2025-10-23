@@ -32,6 +32,9 @@ public class SecurityConfig {
             // Allow public GET access to events (useful for frontend public listing).
             // If you want events protected, remove this matcher.
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/events", "/api/events/**").permitAll()
+            // Allow public access to image upload/download endpoints and uploaded files
+            .requestMatchers(org.springframework.http.HttpMethod.POST, "/image", "/image/**").permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/image/**", "/uploads/**").permitAll()
             .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
 
