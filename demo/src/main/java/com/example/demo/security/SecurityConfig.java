@@ -25,10 +25,14 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/administrators/login").permitAll()
-                        .anyRequest().authenticated())
+        .authorizeHttpRequests(requests -> requests
+            // Allow H2 console and admin login without auth
+            .requestMatchers("/h2-console/**").permitAll()
+            .requestMatchers("/api/administrators/login").permitAll()
+            // Allow public GET access to events (useful for frontend public listing).
+            // If you want events protected, remove this matcher.
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/events", "/api/events/**").permitAll()
+            .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
