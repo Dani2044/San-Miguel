@@ -32,6 +32,10 @@ public class SecurityConfig {
             // Allow public GET access to events (useful for frontend public listing).
             // If you want events protected, remove this matcher.
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/events", "/api/events/**").permitAll()
+            // Allow public GET access to galleries so frontend can fetch images without auth
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/galleries", "/api/galleries/**").permitAll()
+            // Also allow legacy/singular path used by the frontend in some places
+            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/gallery", "/api").permitAll()
             // Allow public access to image upload/download endpoints and uploaded files
             .requestMatchers(org.springframework.http.HttpMethod.POST, "/image", "/image/**").permitAll()
             .requestMatchers(org.springframework.http.HttpMethod.GET, "/image/**", "/uploads/**").permitAll()

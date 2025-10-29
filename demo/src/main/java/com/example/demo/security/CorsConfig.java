@@ -17,7 +17,8 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:4200"));
+    // Allow the local dev frontends (Angular default 4200 and Vite/React 5173).
+    config.setAllowedOriginPatterns(Arrays.asList("http://localhost:4200", "http://localhost:5173"));
         config.setAllowedHeaders(Arrays.asList("Content-Type", "Accept", "Authorization"));
         config.setExposedHeaders(Arrays.asList("Authorization"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
