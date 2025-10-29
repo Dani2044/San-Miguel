@@ -10,8 +10,6 @@ public final class FoundationMapper {
 
   public static FoundationDTO toDTO(Foundation f) {
     if (f == null) return null;
-    List<Long> memberIds = (f.getMembers() == null) ? List.of() : f.getMembers().stream()
-        .map(m -> m.getMemberId()).collect(Collectors.toList());
     List<Long> eventIds = (f.getEvents() == null) ? List.of() : f.getEvents().stream()
         .map(e -> e.getEventId()).collect(Collectors.toList());
     List<Long> sportsClassIds = (f.getSportsClasses() == null) ? List.of() : f.getSportsClasses().stream()
@@ -19,7 +17,6 @@ public final class FoundationMapper {
 
   return new FoundationDTO(
     f.getFoundationId(),
-    memberIds,
     eventIds,
     sportsClassIds
   );

@@ -32,12 +32,6 @@ public class Foundation {
     private String vision;
     @Column(nullable = false)
     private String history;
-
-    @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Member> members;
-
-
     @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Event> events;
