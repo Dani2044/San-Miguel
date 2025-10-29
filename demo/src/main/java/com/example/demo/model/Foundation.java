@@ -37,14 +37,6 @@ public class Foundation {
     private List<Event> events;
 
 
-    @OneToMany(mappedBy = "foundation", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<SportsClass> sportsClasses;
-
-    public Foundation(String name, String mission, String vision, String history) {
-        this.name = name;
-        this.mission = mission;
-        this.vision = vision;
-        this.history = history;
-    }
+    
+    
 }

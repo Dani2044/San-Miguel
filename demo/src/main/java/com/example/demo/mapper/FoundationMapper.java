@@ -12,13 +12,10 @@ public final class FoundationMapper {
     if (f == null) return null;
     List<Long> eventIds = (f.getEvents() == null) ? List.of() : f.getEvents().stream()
         .map(e -> e.getEventId()).collect(Collectors.toList());
-    List<Long> sportsClassIds = (f.getSportsClasses() == null) ? List.of() : f.getSportsClasses().stream()
-        .map(s -> s.getSportsClassId()).collect(Collectors.toList());
 
   return new FoundationDTO(
     f.getFoundationId(),
-    eventIds,
-    sportsClassIds
+    eventIds
   );
   }
 }
