@@ -6,7 +6,7 @@ public record EventDTO(
     Long id,
     String title,
     String description,
-    String event_date,   
+    String event_date,
     String location,
-    List<String> photos  
+    List<String> photos
 ) {}

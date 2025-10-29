@@ -53,12 +53,11 @@ public class DataBaseInit implements ApplicationRunner {
             new Date(),
             "Parque Principal de Cajicá",
             "672eeff8-5de4-464a-b4e6-25a56b924bc0.jpeg",
-            "PLANIFICADO", 
-            "https://facebook.com/fundacionsanmiguel/events/1",
+            "PLANIFICADO",
             foundation
         );
         eventRepository.save(event1);
-        // ... dentro del método run(...)
+        
 
         // nuevo evento seed
         Event event2 = new Event(
@@ -67,9 +66,8 @@ public class DataBaseInit implements ApplicationRunner {
             new SimpleDateFormat("yyyy-MM-dd").parse("2025-12-15"), // startDate
             new SimpleDateFormat("yyyy-MM-dd").parse("2025-12-16"), // endDate
             "Cancha Municipal",
-            "https://example.com/evento2.jpg",
+            "874b1eb2-9ce7-4ba3-a568-9a0b45054482.jpeg",
             "PLANIFICADO",
-            "https://facebook.com/fundacionsanmiguel/events/2",
             foundation
         );
         eventRepository.save(event2);

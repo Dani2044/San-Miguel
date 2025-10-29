@@ -39,13 +39,13 @@ public class Event {
     private String promotionalImage;
     @Column(nullable = false)
     private String status;
-    private String publicationUrl;
+    
 
     @ManyToOne
     @JoinColumn(name = "foundationId")
     private Foundation foundation;
 
-    public Event(String title, String description, Date startDate, Date endDate, String location, String promotionalImage, String status, String publicationUrl, Foundation foundation) {
+    public Event(String title, String description, Date startDate, Date endDate, String location, String promotionalImage, String status, Foundation foundation) {
         this.title = title;
         this.description = description;
         this.startDate = startDate;
@@ -53,7 +53,6 @@ public class Event {
         this.location = location;
         this.promotionalImage = promotionalImage;
         this.status = status;
-        this.publicationUrl = publicationUrl;
         this.foundation = foundation;
     }
 }

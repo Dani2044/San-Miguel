@@ -26,13 +26,13 @@ public final class EventMapper {
         ? List.of(e.getPromotionalImage())
         : List.of();
 
-    return new EventDTO(
-        e.getEventId(),
-        e.getTitle(),
-        e.getDescription(),
-        date,
-        e.getLocation(),
-        photos
-    );
+  return new EventDTO(
+    e.getEventId(),
+    e.getTitle(),
+    e.getDescription(),
+    date,
+    e.getLocation(),
+  photos
+  );
   }
 }
