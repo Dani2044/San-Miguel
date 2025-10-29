@@ -1,15 +1,9 @@
 package com.example.demo.model;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,8 +20,4 @@ public class Role {
     public Role(String name){
         this.name = name;
     }
-
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<UserEntity> users;
 }
