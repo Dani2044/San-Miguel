@@ -16,7 +16,7 @@ import org.springframework.lang.NonNull;
 import java.io.IOException;
 
 @Component
-public class JWTAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTGenerator jwtGenerator;

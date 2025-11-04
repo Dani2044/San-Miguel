@@ -28,8 +28,4 @@ public class Gallery {
     @CollectionTable(name = "gallery_photos", joinColumns = @JoinColumn(name = "gallery_id"))
     @Column(name = "photo")
     private List<String> photos;
-
-    public Gallery(List<String> photos) {
-        this.photos = photos;
-    }
 }
