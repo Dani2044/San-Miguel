@@ -47,8 +47,9 @@ public class FileSystemStorageService implements StorageService {
         Path destination = target.resolve(filename);
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-        // Return a URL path that the controller can serve
-        return "/uploads/" + filename;
+        // Return only the filename (without /uploads/ prefix)
+        // The frontend will construct the full URL using getUploadUrl()
+        return filename;
     }
 
     @Override

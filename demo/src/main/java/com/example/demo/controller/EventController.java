@@ -15,12 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Event;
 import com.example.demo.service.EventService;
+import com.example.demo.service.StorageService;
 import com.example.demo.dto.EventDTO;
 import com.example.demo.mapper.EventMapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
@@ -28,6 +34,7 @@ import java.text.ParseException;
 public class EventController {
 
     private final EventService eventService;
+    private final StorageService storageService;
 
     @GetMapping
     public List<EventDTO> getAllEvents() {
@@ -102,6 +109,44 @@ public class EventController {
                 .toList();
     }
 
+    /**
+     * Upload one or more images to an event.
+     * Adds the uploaded image URLs to the event's photos list.
+     */
+    @PostMapping("/{id}/photos")
+    public ResponseEntity<EventDTO> uploadPhotosToEvent(@PathVariable Long id,
+                                                         @RequestParam("images") MultipartFile[] images) {
+        try {
+            Event event = eventService.getEventById(id)
+                    .orElseThrow(() -> new RuntimeException("Event not found"));
+            
+            List<String> photos = new ArrayList<>();
+            if (event.getPromotionalImage() != null && !event.getPromotionalImage().isBlank()) {
+                photos.add(event.getPromotionalImage());
+            }
+            
+            for (MultipartFile mf : images) {
+                if (mf == null || mf.isEmpty()) continue;
+                // Store to filesystem and get public path like "/uploads/uuid.ext"
+                String stored = storageService.uploadImageToFileSystem(mf);
+                if (!photos.contains(stored)) {
+                    photos.add(stored);
+                }
+            }
+            
+            // Update promotional image to first photo if exists
+            String promotionalImage = photos.isEmpty() ? null : photos.get(0);
+            event.setPromotionalImage(promotionalImage);
+            
+            Event updated = eventService.updateEvent(id, event);
+            return ResponseEntity.ok(EventMapper.toDTO(updated));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     private Event fromDTO(EventDTO dto) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         
@@ -133,11 +178,16 @@ public class EventController {
         // Use promotionalImage from first photo if photos exist
         String promotionalImage = null;
         if (dto.photos() != null && !dto.photos().isEmpty()) {
-            promotionalImage = dto.photos().get(0);
-            // If it's a full URL path like /uploads/filename.jpg, keep it
-            // If it's just a filename, prepend /uploads/
-            if (promotionalImage != null && !promotionalImage.startsWith("/") && !promotionalImage.startsWith("http")) {
-                promotionalImage = "/uploads/" + promotionalImage;
+            String photoPath = dto.photos().get(0);
+            // Extract filename from path (remove /uploads/ prefix if present)
+            if (photoPath != null) {
+                if (photoPath.startsWith("/uploads/")) {
+                    promotionalImage = photoPath.substring("/uploads/".length());
+                } else if (photoPath.startsWith("uploads/")) {
+                    promotionalImage = photoPath.substring("uploads/".length());
+                } else {
+                    promotionalImage = photoPath;
+                }
             }
         }
         

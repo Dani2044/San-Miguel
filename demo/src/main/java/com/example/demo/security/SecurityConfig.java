@@ -23,10 +23,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig {
 
     @Autowired
-    private JWTAuthEntryPoint jwtAuthEntryPoint; // ¡Ojo! Clase se llama exactamente JWTAuthEntryPoint
+    private JWTAuthEntryPoint jwtAuthEntryPoint;
 
     @Autowired
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,28 +40,28 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthEntryPoint))
             .authorizeHttpRequests(req -> req
-                // públicos
+                // públicos - debe ir ANTES de las reglas protegidas
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/api/administrators/login").permitAll()
+                // Allow unauthenticated GET requests to any /api/* resource (read-only public endpoints)
+                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/image/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/galleries/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/gallery").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/*").permitAll()
-                // protegidos
+                // protegidos - POST/PUT/DELETE requieren autenticación
                 .requestMatchers(HttpMethod.POST, "/api/events/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/events/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/events/**").authenticated()
+                // Para rutas como /api/{id}/photos, usar un solo wildcard (*) en lugar de (**)
                 .requestMatchers(HttpMethod.POST, "/api/*/photos").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/*/photos").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
                 .requestMatchers(HttpMethod.POST, "/image", "/image/**").authenticated()
+                // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
             );
 
         // El filtro JWT debe ir antes de UsernamePasswordAuthenticationFilter
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -78,10 +81,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
         return cfg.getAuthenticationManager();
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
     }
 }

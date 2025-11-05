@@ -49,8 +49,22 @@ El servidor se iniciará en `http://localhost:8080` (o el puerto configurado en 
 |----------|-------------|-------------------|
 | `SPRING_PROFILES_ACTIVE` | Perfil activo (dev/prod) | dev |
 | `SERVER_PORT` | Puerto del servidor | 8080 |
-| `SPRING_DATASOURCE_URL` | URL de la base de datos | jdbc:h2:mem:testdb... |
+| `SPRING_DATASOURCE_URL` | URL de la base de datos | jdbc:h2:file:./data/sanmigueldb |
 | `SPRING_DATASOURCE_USERNAME` | Usuario de la base de datos | SanMiguel |
 | `SPRING_DATASOURCE_PASSWORD` | Contraseña de la base de datos | (ver .env.example) |
 | `JWT_SECRET` | Clave secreta para JWT | (ver .env.example) |
 | `APP_UPLOAD_DIR` | Directorio para subir archivos | uploads |
+| `SPRING_JPA_HIBERNATE_DDL_AUTO` | Modo de actualización de esquema | update |
+
+## 💾 Persistencia de Datos
+
+El proyecto está configurado para **persistir todos los datos** en archivos locales:
+
+- **Base de datos**: Los datos se guardan en `./data/sanmigueldb.mv.db` (directorio `demo/data/`)
+- **Imágenes**: Los archivos subidos se guardan en `./uploads/` (directorio `demo/uploads/`)
+
+**⚠️ Importante:**
+- Los datos **persisten** entre reinicios del servidor
+- Al reiniciar el backend, todos los eventos, galerías y usuarios se mantienen
+- Los directorios `data/` y `uploads/` están en `.gitignore` y no se suben al repositorio
+- Si necesitas hacer un backup, copia los directorios `data/` y `uploads/`

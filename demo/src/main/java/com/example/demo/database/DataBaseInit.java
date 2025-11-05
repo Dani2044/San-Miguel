@@ -45,11 +45,15 @@ public class DataBaseInit implements ApplicationRunner {
             });
         }
         
+        // Solo inicializar datos si la base de datos está vacía (primera vez)
         if (eventRepository.count() > 0) {
+            System.out.println("La base de datos ya contiene datos. No se inicializarán datos de ejemplo.");
             return;
         }
 
-        // 2) Events 
+        System.out.println("Inicializando datos de ejemplo...");
+
+        // 2) Events - Solo se crean si no hay eventos
         Event event1 = new Event(
         "Jornada de Recreación con Niños",
         "Se realizó una jornada de recreación con los niños, compartiendo juegos, dinámicas y diferentes actividades al aire libre en un ambiente de alegría y convivencia.",
@@ -61,20 +65,26 @@ public class DataBaseInit implements ApplicationRunner {
         null
         );
         eventRepository.save(event1);
+        System.out.println("Evento de ejemplo creado: " + event1.getTitle());
         
-        // 3) Example gallery seed - you can add any number of photos here
-        Gallery galeria = Gallery.builder()
-            .photos(java.util.List.of(
-                "874b1eb2-9ce7-4ba3-a568-9a0b45054482.jpeg",
-                "e9bf1c24-4240-4eae-8e94-3bf0edcfe159.jpeg",
-                "fe4b0e96-3ebd-4cc1-b2f1-7c7c93a75615.jpeg",
-                "71e201c8-838a-4a2b-8a69-e1b040bf9ff0.jpeg",
-                "87b74cbb-595a-4777-b8ec-9169b2a24a12.jpeg",
-                "460a46fc-022d-4a93-aa82-fdbe99c2287f.jpeg",
-                "6d26d4ec-3877-4bd0-acbc-71d6d590f5d6.jpg"
-            ))
-            .build();
-        galleryRepository.save(galeria);
+        // 3) Example gallery seed - Solo se crea si no hay galerías
+        if (galleryRepository.count() == 0) {
+            Gallery galeria = Gallery.builder()
+                .photos(java.util.List.of(
+                    "874b1eb2-9ce7-4ba3-a568-9a0b45054482.jpeg",
+                    "e9bf1c24-4240-4eae-8e94-3bf0edcfe159.jpeg",
+                    "fe4b0e96-3ebd-4cc1-b2f1-7c7c93a75615.jpeg",
+                    "71e201c8-838a-4a2b-8a69-e1b040bf9ff0.jpeg",
+                    "87b74cbb-595a-4777-b8ec-9169b2a24a12.jpeg",
+                    "460a46fc-022d-4a93-aa82-fdbe99c2287f.jpeg",
+                    "6d26d4ec-3877-4bd0-acbc-71d6d590f5d6.jpg"
+                ))
+                .build();
+            galleryRepository.save(galeria);
+            System.out.println("Galería de ejemplo creada con " + galeria.getPhotos().size() + " fotos");
+        }
+        
+        System.out.println("Inicialización de datos completada.");
 
     }
 }
