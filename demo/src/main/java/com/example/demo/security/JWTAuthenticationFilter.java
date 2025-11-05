@@ -4,49 +4,95 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.lang.NonNull;
 
 import java.io.IOException;
+import java.util.Set;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JWTGenerator jwtGenerator;
+    private JwtTokenService jwtTokenService; // tu servicio para parsear/validar el JWT
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private UserDetailsService userDetailsService;
+
+    // Rutas que no deben pasar por este filtro
+    private static final Set<String> PUBLIC_PATHS = Set.of(
+        "/h2-console/",
+        "/api/administrators/login",
+        "/uploads/",
+        "/image/",
+        "/api/events/",
+        "/api/galleries/",
+        "/api/gallery"
+    );
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
-        String token = getJWT(request);
-        if (token != null && jwtGenerator.validateToken(token)) {
-            String username = jwtGenerator.extractUsername(token);
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = normalize(request.getRequestURI());
+        // Ignorar GETs a recursos públicos
+        if (HttpMethod.GET.matches(request.getMethod())) {
+            for (String p : PUBLIC_PATHS) {
+                if (path.startsWith(p)) return true;
+            }
+            // También ignorar GET genérico /api/* ya permitido
+            if (path.matches("^/api/[^/]+$")) return true;
         }
-        filterChain.doFilter(request, response);
+        // H2 console cualquier método
+        if (path.startsWith("/h2-console/")) return true;
+        return false;
     }
 
-    private String getJWT(HttpServletRequest request) {
+    private String normalize(String uri) {
+        if (uri == null || uri.isEmpty()) return "/";
+        // Asegurar trailing slash donde corresponda para los startsWith
+        if (uri.endsWith("/")) return uri;
+        return uri;
+    }
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
+
         String authHeader = request.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.replace("Bearer ", "");
+
+        // Si no hay Bearer, no intentamos autenticar: continuar
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
         }
-        return null;
+
+        String token = authHeader.substring(7);
+
+        try {
+            String username = jwtTokenService.extractUsername(token);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (jwtTokenService.isTokenValid(token, username)) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                } else {
+                    // Token presente pero inválido: limpiamos y seguimos (rutas públicas continuarán; rutas protegidas caerán en 401 más adelante)
+                    SecurityContextHolder.clearContext();
+                }
+            }
+        } catch (Exception ex) {
+            // Cualquier problema parseando el token: no autenticamos y dejamos continuar
+            SecurityContextHolder.clearContext();
+        }
+
+        filterChain.doFilter(request, response);
     }
 }

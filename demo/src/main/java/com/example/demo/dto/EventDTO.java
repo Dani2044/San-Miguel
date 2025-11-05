@@ -7,6 +7,8 @@ public record EventDTO(
     String title,
     String description,
     String event_date,
+    String start_date,
+    String end_date,
     String location,
     List<String> photos
 ) {}

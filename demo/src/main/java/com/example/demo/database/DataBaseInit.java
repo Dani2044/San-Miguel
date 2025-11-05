@@ -3,11 +3,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.example.demo.model.Event;
 import com.example.demo.model.Gallery;
+import com.example.demo.model.UserEntity;
 import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.GalleryRepository;
+import com.example.demo.repository.UserEntityRepository;
 import jakarta.transaction.Transactional;
 import java.text.SimpleDateFormat;
 
@@ -19,9 +22,28 @@ public class DataBaseInit implements ApplicationRunner {
 
     @Autowired private EventRepository eventRepository;
     @Autowired private GalleryRepository galleryRepository;
+    @Autowired private UserEntityRepository userRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        
+        // 1) Create admin user if not exists
+        if (!userRepository.existsByUsername("SanMiguel2025")) {
+            String encodedPassword = passwordEncoder.encode("12345");
+            UserEntity admin = UserEntity.builder()
+                    .username("SanMiguel2025")
+                    .password(encodedPassword)
+                    .build();
+            UserEntity saved = userRepository.save(admin);
+            System.out.println("Usuario creado: " + saved.getUsername() + " con ID: " + saved.getUser_id());
+        } else {
+            System.out.println("El usuario SanMiguel2025 ya existe");
+            // Verificar que el usuario existe y puede ser encontrado
+            userRepository.findByUsername("SanMiguel2025").ifPresent(user -> {
+                System.out.println("Usuario encontrado: " + user.getUsername() + " con ID: " + user.getUser_id());
+            });
+        }
         
         if (eventRepository.count() > 0) {
             return;

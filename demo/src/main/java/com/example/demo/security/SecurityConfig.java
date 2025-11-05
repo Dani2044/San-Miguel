@@ -3,45 +3,61 @@ package com.example.demo.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
-    private JWTAuthEntryPoint jwtAuthEntryPoint;
+    private JWTAuthEntryPoint jwtAuthEntryPoint; // ¡Ojo! Clase se llama exactamente JWTAuthEntryPoint
+
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
-        .authorizeHttpRequests(requests -> requests
-            // Allow H2 console and admin login without auth
-            .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/api/administrators/login").permitAll()
-            // Allow public GET access to events (useful for frontend public listing).
-            // If you want events protected, remove this matcher.
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/events", "/api/events/**").permitAll()
-            // Allow public GET access to galleries so frontend can fetch images without auth
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/galleries", "/api/galleries/**").permitAll()
-            // Also allow legacy/singular path used by the frontend in some places
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/gallery", "/api").permitAll()
-            // Allow public access to image upload/download endpoints and uploaded files
-            .requestMatchers(org.springframework.http.HttpMethod.POST, "/image", "/image/**").permitAll()
-            .requestMatchers(org.springframework.http.HttpMethod.GET, "/image/**", "/uploads/**").permitAll()
-            .anyRequest().authenticated())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authenticationProvider(authenticationProvider())
+            .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthEntryPoint))
+            .authorizeHttpRequests(req -> req
+                // públicos
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/api/administrators/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/image/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/galleries/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/gallery").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/*").permitAll()
+                // protegidos
+                .requestMatchers(HttpMethod.POST, "/api/events/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/events/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/events/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/*/photos").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/*/photos").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/image", "/image/**").authenticated()
+                .anyRequest().authenticated()
+            );
 
+        // El filtro JWT debe ir antes de UsernamePasswordAuthenticationFilter
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -52,12 +68,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
+        return cfg.getAuthenticationManager();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 }

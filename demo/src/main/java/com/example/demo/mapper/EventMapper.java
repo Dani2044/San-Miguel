@@ -14,14 +14,29 @@ public final class EventMapper {
   private EventMapper() {}
 
   public static EventDTO toDTO(Event e) {
-    String date = null;
+    String event_date = null;
+    String start_date = null;
+    String end_date = null;
+    
     if (e.getStartDate() != null) {
-      date = e.getStartDate()
+      event_date = e.getStartDate()
               .toInstant()
               .atZone(ZONE)
               .toLocalDate()
               .format(ISO);
+      start_date = event_date;
     }
+    
+    if (e.getEndDate() != null) {
+      end_date = e.getEndDate()
+              .toInstant()
+              .atZone(ZONE)
+              .toLocalDate()
+              .format(ISO);
+    } else if (start_date != null) {
+      end_date = start_date; // Default to start_date if end_date not set
+    }
+    
     List<String> photos = (e.getPromotionalImage() != null && !e.getPromotionalImage().isBlank())
         ? List.of(e.getPromotionalImage())
         : List.of();
@@ -30,7 +45,9 @@ public final class EventMapper {
     e.getEventId(),
     e.getTitle(),
     e.getDescription(),
-    date,
+    event_date,
+    start_date,
+    end_date,
     e.getLocation(),
   photos
   );

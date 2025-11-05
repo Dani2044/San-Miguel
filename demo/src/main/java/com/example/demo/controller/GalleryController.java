@@ -85,4 +85,17 @@ public class GalleryController {
         Gallery saved = galleryRepository.save(gallery);
         return ResponseEntity.ok(GalleryMapper.toDTO(saved));
     }
+
+    /**
+     * Delete a photo from a gallery by updating the photo list.
+     */
+    @PutMapping("/{id}/photos")
+    public ResponseEntity<GalleryDTO> updateGalleryPhotos(@PathVariable Long id, @RequestBody GalleryDTO dto) {
+        Optional<Gallery> opt = galleryRepository.findById(id);
+        if (opt.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Gallery gallery = opt.get();
+        gallery.setPhotos(dto.photos() != null ? dto.photos() : new ArrayList<>());
+        Gallery saved = galleryRepository.save(gallery);
+        return ResponseEntity.ok(GalleryMapper.toDTO(saved));
+    }
 }
